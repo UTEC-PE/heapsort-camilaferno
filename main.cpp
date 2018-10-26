@@ -14,6 +14,7 @@ int generateRandomInt(int min, int max);
 void printArray(int *array, size_t size);
 void heapsort(int* array, size_t size);
 bool validate(int* array, size_t size);
+void maxheap(int* array, size_t size);
 
 int main(int argc, char *argv[]) {
     rng.seed(random_device()());
@@ -37,7 +38,7 @@ int main(int argc, char *argv[]) {
 }
 
 int generateRandomInt(int min, int max) {
-    uniform_int_distribution<mt19937::result_type> distribution(min, max); 
+    uniform_int_distribution<mt19937::result_type> distribution(min, max);
     return distribution(rng);
 }
 
@@ -48,8 +49,35 @@ void printArray(int *array, size_t size) {
     cout << endl;
 }
 
+void maxheap(int* array, size_t size, int root){
+  int max = root;
+  int left = 2*root + 1;
+  int right = 2*root + 2;
+
+  if(left < size && array[left] > array[max]){
+    max = left;
+  }
+
+  if(right < size && array[right] > array[max]){
+    max = right;
+  }
+
+  if(max != root){
+    swap(array[max], array[root]);
+    maxheap(array, size, max);
+  }
+}
+
 void heapsort(int* array, size_t size) {
-    // TODO
+  for (int i = size/2-1; i >= 0; i--){
+    maxheap(array, size, i);
+  }
+
+  for (int i=size-1; i>=0; i--)
+  {
+      swap(array[0], array[i]);
+      maxheap(array, i, 0);
+  }
 }
 
 bool validate(int* array, size_t size) {
